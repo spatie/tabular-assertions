@@ -5,7 +5,6 @@ $users = [
     ['id' => 1245, 'name' => 'Jane Doe', 'email' => 'jane@doe.com'],
 ];
 
-
 test('it compares a table', function () use ($users) {
     expect($users)->toMatchTable('
         |   id | name        | email           |
