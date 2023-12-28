@@ -1,11 +1,9 @@
 <?php
 
-use Spatie\TabularAssertions\Parse;
+use Spatie\TabularAssertions\Table;
 
-$parse = new Parse();
-
-test('it parses an expectation with a single column and a single row', function () use ($parse) {
-    $expected = $parse('
+test('it parses an expectation with a single column and a single row', function () {
+    $expected = Table::from('
         | first_name |
         | John       |
     ');
@@ -22,8 +20,8 @@ test('it parses an expectation with a single column and a single row', function 
     expect($expected->rows[0][0]->data)->toBe('John');
 });
 
-test('it parses an expectation with two columns and two rows', function () use ($parse) {
-    $expected = $parse('
+test('it parses an expectation with two columns and two rows', function () {
+    $expected = Table::from('
         | first_name | last_name |
         | John       | Doe       |
         | Jane       | Doe       |

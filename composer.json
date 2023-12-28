@@ -27,7 +27,8 @@
         "psr-4": {
             "Spatie\\TabularAssertions\\": "src/",
             "Spatie\\TabularAssertions\\Database\\Factories\\": "database/factories/"
-        }
+        },
+        "files": ["src/Pest/Autoload.php"]
     },
     "autoload-dev": {
         "psr-4": {

@@ -5,3 +5,5 @@ parameters:
     level: 9
     paths:
         - src
+    excludePaths:
+        - src/Pest
