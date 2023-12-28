@@ -43,7 +43,7 @@ class Table
     }
 
     /**
-     * @param mixed[][] $data
+     * @param  mixed[][]  $data
      * @return string[]
      */
     public function compare(array $data): array
@@ -60,7 +60,7 @@ class Table
         ];
     }
 
-    /** @param Cell[][] $rows */
+    /** @param  Cell[][]  $rows */
     private function serialize(array $rows): string
     {
         $data = [[]];
@@ -73,8 +73,8 @@ class Table
             }
         }
 
-        return PHP_EOL . implode(PHP_EOL, array_map(function (array $row) {
-            return '| ' . implode(' | ', $row) . ' |';
-        }, $data)) . PHP_EOL;
+        return PHP_EOL.implode(PHP_EOL, array_map(function (array $row) {
+            return '| '.implode(' | ', $row).' |';
+        }, $data)).PHP_EOL;
     }
 }
