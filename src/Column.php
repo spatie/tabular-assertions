@@ -17,8 +17,6 @@ class Column
     {
         $data = $this->format($data);
 
-        ray(strlen($data));
-
         $this->width = max($this->width, strlen($data));
 
         return new Cell($data);
