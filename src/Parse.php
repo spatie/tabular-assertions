@@ -2,7 +2,6 @@
 
 namespace Spatie\TabularAssertions;
 
-use Exception;
 use ParseError;
 
 class Parse

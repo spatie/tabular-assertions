@@ -16,10 +16,10 @@ test('it parses an expectation with a single column and a single row', function 
     expect($expected->columns[0]->width)->toBe(10);
     expect($expected->columns[0]->numeric)->toBeFalse();
 
-     expect($expected->rows)->toHaveCount(1);
+    expect($expected->rows)->toHaveCount(1);
 
-     expect($expected->rows[0])->toHaveCount(1);
-     expect($expected->rows[0][0]->data)->toBe('John');
+    expect($expected->rows[0])->toHaveCount(1);
+    expect($expected->rows[0][0]->data)->toBe('John');
 });
 
 test('it parses an expectation with two columns and two rows', function () use ($parse) {
@@ -41,11 +41,11 @@ test('it parses an expectation with two columns and two rows', function () use (
 
     expect($expected->rows)->toHaveCount(2);
 
-     expect($expected->rows[0])->toHaveCount(2);
-     expect($expected->rows[0][0]->data)->toBe('John');
-     expect($expected->rows[0][1]->data)->toBe('Doe');
+    expect($expected->rows[0])->toHaveCount(2);
+    expect($expected->rows[0][0]->data)->toBe('John');
+    expect($expected->rows[0][1]->data)->toBe('Doe');
 
-     expect($expected->rows[1])->toHaveCount(2);
-     expect($expected->rows[1][0]->data)->toBe('Jane');
-     expect($expected->rows[1][1]->data)->toBe('Doe');
+    expect($expected->rows[1])->toHaveCount(2);
+    expect($expected->rows[1][0]->data)->toBe('Jane');
+    expect($expected->rows[1][1]->data)->toBe('Doe');
 });

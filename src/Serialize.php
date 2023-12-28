@@ -5,8 +5,8 @@ namespace Spatie\TabularAssertions;
 class Serialize
 {
     /**
-     * @param mixed[][] $data
-     * @param Column[] $columns
+     * @param  mixed[][]  $data
+     * @param  Column[]  $columns
      */
     public function __invoke(array $columns, array $data): Table
     {

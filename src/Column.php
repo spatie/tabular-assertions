@@ -8,7 +8,7 @@ class Column
 
     public function __construct(
         public string $name,
-        public bool   $numeric = false,
+        public bool $numeric = false,
     ) {
         $this->width = strlen($name);
     }
