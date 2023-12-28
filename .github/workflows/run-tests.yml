@@ -1,4 +1,4 @@
-name: run-tests
+name: Tests
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         php: [8.2]
         stability: [prefer-lowest, prefer-stable]
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -39,4 +39,4 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Run tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/pest

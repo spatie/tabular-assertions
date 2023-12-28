@@ -18,7 +18,11 @@
         "php": "^8.2"
     },
     "require-dev": {
-        "laravel/pint": "^1.0"
+        "laravel/pint": "^1.0",
+        "pestphp/pest": "^2.28",
+        "pestphp/pest-plugin-watch": "^2.0",
+        "phpstan/phpstan": "^1.10",
+        "spatie/ray": "^1.40"
     },
     "autoload": {
         "psr-4": {
@@ -36,7 +40,10 @@
         "format": "vendor/bin/pint"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
