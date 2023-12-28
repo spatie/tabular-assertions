@@ -24,10 +24,7 @@ class Column
 
     private function format(mixed $data): string
     {
-        if (! is_string($data)) {
-            return '';
-        }
-
-        return $data;
+        /** @phpstan-ignore-next-line */
+        return (string) $data;
     }
 }

@@ -23,8 +23,12 @@ class Table
         $data = explode("\n", $input);
         $header = array_shift($data);
 
-        $columns = array_filter(array_map(function (string $header) {
-            return new Column(trim($header));
+        $columns = array_filter(array_map(function (string $header) use ($data) {
+            // When there's data, assume the column is numeric as the data will determine how it is aligned later,
+            // as _all_ data must be numeric.
+            $isNumeric = count($data) > 0 || preg_match('/^\s\s+/', $header);
+
+            return new Column(trim($header), $isNumeric);
         }, explode('|', trim($header, '|'))));
 
         $rows = array_map(function (string $row) use ($columns) {
@@ -35,6 +39,10 @@ class Table
             }
 
             return array_map(function (string $cell, Column $column) {
+                if (! preg_match('/^(\s|\d|-|_)*$/', $cell)) {
+                    $column->numeric = false;
+                }
+
                 return $column->cell(trim($cell));
             }, explode('|', trim($row, '|')), $columns);
         }, $data);

@@ -47,3 +47,40 @@ test('it parses an expectation with two columns and two rows', function () {
     expect($expected->rows[1][0]->data)->toBe('Jane');
     expect($expected->rows[1][1]->data)->toBe('Doe');
 });
+
+test('it sizes the column based on the data', function () {
+    $expected = Table::from('
+        | name      |
+        | Sebastian |
+    ');
+
+    expect($expected->columns)->toHaveCount(1);
+
+    expect($expected->columns[0]->width)->toBe(9);
+});
+
+test('it recognizes left-aligned numeric data', function () {
+    $expected = Table::from('
+        | name      |   id | notes |
+        | Sebastian | 1023 | test  |
+        | Freek     | 2342 | 42    |
+    ');
+
+    expect($expected->columns)->toHaveCount(3);
+
+    expect($expected->columns[0]->numeric)->toBeFalse();
+    expect($expected->columns[1]->numeric)->toBeTrue();
+    expect($expected->columns[2]->numeric)->toBeFalse();
+});
+
+test('it recognizes left-aligned numeric data in an empty dataset', function () {
+    $expected = Table::from('
+        | name      |   id | notes |
+    ');
+
+    expect($expected->columns)->toHaveCount(3);
+
+    expect($expected->columns[0]->numeric)->toBeFalse();
+    expect($expected->columns[1]->numeric)->toBeTrue();
+    expect($expected->columns[2]->numeric)->toBeFalse();
+});
