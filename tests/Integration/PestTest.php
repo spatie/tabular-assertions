@@ -13,7 +13,6 @@ test('it compares a table', function () use ($users) {
     ');
 });
 
-
 test('it fails when the table does not match', function () use ($users) {
     expect($users)->toMatchTable('
         |   id | name        | email           |
