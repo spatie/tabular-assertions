@@ -47,7 +47,7 @@ class Column
 
     public function header(): string
     {
-        return $this->format(($this->dynamic ? '#' : '') . $this->name, raw: true);
+        return $this->format(($this->dynamic ? '#' : '').$this->name, raw: true);
     }
 
     public function format(string $data, bool $raw = false): string
@@ -71,9 +71,9 @@ class Column
         if ($index === false) {
             $this->dynamicValues[] = $data;
 
-            return '#' . count($this->dynamicValues);
+            return '#'.count($this->dynamicValues);
         }
 
-        return '#' . ($index + 1);
+        return '#'.($index + 1);
     }
 }

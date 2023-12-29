@@ -68,7 +68,7 @@ class Table
         ];
     }
 
-    /** @param  string[][] $rows */
+    /** @param  string[][]  $rows */
     private function serialize(array $rows, bool $raw = false): string
     {
         $data = [[]];
