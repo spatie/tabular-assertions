@@ -12,3 +12,12 @@ test('it compares a table', function () use ($users) {
         | 1245 | Jane Doe    | jane@doe.com    |
     ');
 });
+
+
+test('it fails when the table does not match', function () use ($users) {
+    expect($users)->toMatchTable('
+        |   id | name        | email           |
+        |   20 | Wrong name  | john@doe.com    |
+        | 1245 | Jane Doe    | jane@doe.com    |
+    ');
+})->fails();
