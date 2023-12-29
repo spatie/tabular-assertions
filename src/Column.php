@@ -4,27 +4,76 @@ namespace Spatie\TabularAssertions;
 
 class Column
 {
-    public int $width;
+    /** @var string[] */
+    private array $dynamicValues = [];
 
-    public function __construct(
+    private function __construct(
         public string $name,
-        public bool $numeric = false,
+        public int $width,
+        public bool $dynamic,
+        public Align $align,
     ) {
-        $this->width = strlen($name);
     }
 
-    public function cell(mixed $data): Cell
+    public static function create(string $name, Align $align = Align::Left): self
     {
-        $data = $this->format($data);
+        $name = trim($name);
+        $width = strlen($name);
+        $dynamic = str_starts_with($name, '#');
+
+        if ($dynamic) {
+            $name = substr($name, 1);
+        }
+
+        return new self(
+            name: $name,
+            width: $width,
+            dynamic: $dynamic,
+            align: $align,
+        );
+    }
+
+    public function cell(mixed $data): string
+    {
+        /** @phpstan-ignore-next-line */
+        $data = (string) $data;
+
+        $data = str_replace('|', '-', trim($data));
 
         $this->width = max($this->width, strlen($data));
 
-        return new Cell($data);
+        return $data;
     }
 
-    private function format(mixed $data): string
+    public function header(): string
     {
-        /** @phpstan-ignore-next-line */
-        return (string) $data;
+        return $this->format(($this->dynamic ? '#' : '') . $this->name, raw: true);
+    }
+
+    public function format(string $data, bool $raw = false): string
+    {
+        return str_pad(
+            string: $raw ? $data : $this->value($data),
+            length: $this->width,
+            pad_type: $this->align === Align::Left ? STR_PAD_RIGHT : STR_PAD_LEFT,
+        );
+    }
+
+    private function value(string $data): string
+    {
+        if (! $this->dynamic) {
+            return $data;
+        }
+
+        /** @var int|false $index */
+        $index = array_search($data, $this->dynamicValues, true);
+
+        if ($index === false) {
+            $this->dynamicValues[] = $data;
+
+            return '#' . count($this->dynamicValues);
+        }
+
+        return '#' . ($index + 1);
     }
 }

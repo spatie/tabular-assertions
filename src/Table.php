@@ -8,7 +8,7 @@ class Table
 {
     /**
      * @param  Column[]  $columns
-     * @param  Cell[][]  $rows
+     * @param  string[][]  $rows
      */
     private function __construct(
         public array $columns,
@@ -26,9 +26,9 @@ class Table
         $columns = array_filter(array_map(function (string $header) use ($data) {
             // When there's data, assume the column is numeric as the data will determine how it is aligned later,
             // as _all_ data must be numeric.
-            $isNumeric = count($data) > 0 || preg_match('/^\s\s+/', $header);
+            $alignRight = count($data) > 0 || preg_match('/^\s\s+/', $header);
 
-            return new Column(trim($header), $isNumeric);
+            return Column::create($header, $alignRight ? Align::Right : Align::Left);
         }, explode('|', trim($header, '|'))));
 
         $rows = array_map(function (string $row) use ($columns) {
@@ -39,11 +39,11 @@ class Table
             }
 
             return array_map(function (string $cell, Column $column) {
-                if (! preg_match('/^(\s|\d|-|_)*$/', $cell)) {
-                    $column->numeric = false;
+                if (! preg_match('/^(\s|\d|-|_|#)*$/', $cell)) {
+                    $column->align = Align::Left;
                 }
 
-                return $column->cell(trim($cell));
+                return $column->cell($cell);
             }, explode('|', trim($row, '|')), $columns);
         }, $data);
 
@@ -57,27 +57,27 @@ class Table
     public function compare(array $data): array
     {
         $rows = array_map(function (array $row) {
-            return array_map(function (Column $column, mixed $row) {
-                return $column->cell($row);
-            }, $this->columns, $row);
+            return array_map(function (Column $column) use ($row) {
+                return $column->cell($row[$column->name] ?? '');
+            }, $this->columns);
         }, $data);
 
         return [
-            $this->serialize($this->rows),
+            $this->serialize($this->rows, raw: true),
             $this->serialize($rows),
         ];
     }
 
-    /** @param  Cell[][]  $rows */
-    private function serialize(array $rows): string
+    /** @param  string[][] $rows */
+    private function serialize(array $rows, bool $raw = false): string
     {
         $data = [[]];
 
         foreach ($this->columns as $columnIndex => $column) {
-            $data[0][$columnIndex] = str_pad($column->name, $column->width);
+            $data[0][$columnIndex] = $column->header();
 
             foreach ($rows as $rowIndex => $row) {
-                $data[$rowIndex + 1][$columnIndex] = str_pad($row[$columnIndex]->data, $column->width);
+                $data[$rowIndex + 1][$columnIndex] = $column->format($row[$columnIndex], $raw);
             }
         }
 

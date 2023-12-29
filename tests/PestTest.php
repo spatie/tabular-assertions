@@ -9,6 +9,6 @@ test('it compares a table', function () use ($users) {
     expect($users)->toMatchTable('
         |   id | name        | email           |
         |   20 | John Doe    | john@doe.com    |
-        | 2344 | Johanna Doe | johanna@doe.com |
+        | 1245 | Jane Doe    | jane@doe.com    |
     ');
 });
