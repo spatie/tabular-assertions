@@ -11,13 +11,15 @@ class PHPUnitTest extends TestCase
 
     public function test_it_compares_a_table(): void
     {
+        $users = [
+            ['id' => 20, 'name' => 'John Doe', 'email' => 'john@doe.com'],
+            ['id' => 1245, 'name' => 'Jane Doe', 'email' => 'jane@doe.com'],
+        ];
+
         $this->assertMatchesTable('
             |   id | name        | email           |
             |   20 | John Doe    | john@doe.com    |
             | 1245 | Jane Doe    | jane@doe.com    |
-        ', [
-            ['id' => 20, 'name' => 'John Doe', 'email' => 'john@doe.com'],
-            ['id' => 1245, 'name' => 'Jane Doe', 'email' => 'jane@doe.com'],
-        ]);
+        ', $users);
     }
 }
