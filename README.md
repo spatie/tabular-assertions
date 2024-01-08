@@ -5,8 +5,6 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/spatie/tabular-assertions/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/spatie/tabular-assertions/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/tabular-assertions.svg?style=flat-square)](https://packagist.org/packages/spatie/tabular-assertions)
 
-**🚧 This package is under development! Documentation is scarce but feel free to play around already.** 
-
 Tabular assertions allow you to describe data in a Markdown table-like format and compare it to the actual data. This is especially useful when comparing large, ordered data sets like financial data or a time series. 
 
 With Pest:
