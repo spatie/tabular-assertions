@@ -12,11 +12,6 @@ Tabular assertions allow you to describe data in a Markdown table-like format an
 With Pest:
 
 ```php
-$users = [
-    ['id' => 20, 'name' => 'John Doe', 'email' => 'john@doe.com'],
-    ['id' => 1245, 'name' => 'Jane Doe', 'email' => 'jane@doe.com'],
-];
-
 test('it compares a table', function () use ($users) {
     $order = Order::factory()
         ->addItem('Pen', 2)
@@ -24,7 +19,10 @@ test('it compares a table', function () use ($users) {
         ->addItem('Pencil', 5)
         ->create();
 
-    expect($order->items)->toMatchTable('
+        $items = $order->items
+            ->map->only(['id', 'order_id', 'name', 'quantity']);
+
+    expect($items)->toMatchTable('
         | #id | #order_id | name   | quantity |
         |  #1 |        #1 | Pen    |        2 |
         |  #2 |        #1 | Paper  |        1 |
@@ -50,13 +48,16 @@ class PHPUnitTest extends TestCase
             ->addItem('Paper', 1)
             ->addItem('Pencil', 5)
             ->create();
+
+        $items = $order->items
+            ->map->only(['id', 'order_id', 'name', 'quantity']);
     
         $this->assertMatchesTable('
             | #id | #order_id | name   | quantity |
             |  #1 |        #1 | Pen    |        2 |
             |  #2 |        #1 | Paper  |        1 |
             |  #3 |        #1 | Pencil |        5 |
-        ', $order->items);
+        ', $items);
     }
 }
 ```
@@ -75,6 +76,91 @@ You can install the package via composer:
 
 ```bash
 composer require spatie/tabular-assertions
+```
+
+## Why tabular assertions?
+
+Tabular assertions have two major benefits over other testing strategies: expectations are optimized for readability & failed assertions can display multiple errors at once.
+
+**1. You can hand-write expectations that contain a lot of data and are optimized for readability.** Text-based tables are compact, allow you to compare the data in two dimensions.
+
+The alternative would be to write multiple assertions.
+
+```php
+expect($items[0]['order_id'])->toBe($order->id);
+expect($items[0]['name'])->toBeDate('Pen');
+expect($items[0]['quantity'])->toBe(2);
+
+expect($items[1]['order_id'])->toBe($order->id);
+expect($items[1]['name'])->toBeDate('Paper');
+expect($items[1]['quantity'])->toBe(1);
+
+// …
+```
+
+Expectations require you to assert each property individually. This makes it hard to see all dates at a glance, and is less readable in general.
+
+Associative arrays require a lot of repetition with labels.
+
+```php
+expect($items[0])->toBe([
+    'order_id' => $order->id,
+    'name' => 'Pen',
+    'quantity' => 2,
+]);
+
+expect($items[1])->toBe([
+    'order_id' => $order->id,
+    'date' => 'Paper',
+    'quantity' => 1,
+]);
+
+// etc…
+```
+
+Arrays without keys can't be aligned properly (manually maintained spaces would be striped by code style fixers). This becomes unclear when asserting multiple columns with different lengths.
+
+```php
+expect($items)->toBe([
+    [$order->id, 'Pen', 2],
+    [$order->id, 'Paper', 1],
+    // …
+]);
+```
+
+With tabular assertions, we get a compact, readable overview of the data, and because it's stored in a single string code style fixers won't reformat it.
+
+```php
+expect($items)->toMatchTable('
+    | #id | #order_id | name   | quantity |
+    |  #1 |        #1 | Pen    |        2 |
+    |  #2 |        #1 | Paper  |        1 |
+    |  #3 |        #1 | Pencil |        5 |
+');
+```
+
+**2. Errors that can display multiple problems.** With separate expectations, tests fail on the first failed assertion which means you don't have the full picture (small issue vs. everything broken)
+
+If you serialize two datasets to a table, you can get a nice output in a visual diff like PhpStorm's output when you use `assertEquals`.
+
+In this assertions, you can see one value is wrong and one row is missing in one glance. With separate assertions, you only see the first error your test runner comes across.
+
+<img width="698" alt="CleanShot 2023-02-09 at 14 48 38@2x" src="https://user-images.githubusercontent.com/1561079/217830800-e88953a5-446b-49d1-be7d-edfbb5484441.png">
+
+This style of testing really shines when you have a lot of data to assert. This example has 9 rows and 9 columns, which means we're comparing 81 data points while keeping it all readable.
+
+```php
+expect($order->logs)->toLookLike("
+    | type        | reason   | #product_id | #tax_id | #shipping_id | #payment_id | price | paid  | refunded |
+    | product     | created  |       #1    |         |              |             | 80_00 | 80_00 |     0_00 |
+    | tax         | created  |       #1    |      #1 |              |             |  5_00 |  5_00 |     0_00 |
+    | tax         | created  |       #1    |      #2 |              |             | 10_00 | 10_00 |     0_00 |
+    | shipping    | created  |       #1    |         |           #1 |             |  5_00 |  5_00 |     0_00 |
+    | product     | paid     |       #1    |         |              |          #1 |  0_00 |  0_00 |     2_00 |
+    | tax         | paid     |       #1    |      #1 |              |          #1 |  0_00 |  0_00 |     0_00 |
+    | tax         | paid     |       #1    |      #2 |              |          #1 |  0_00 |  0_00 |     0_00 |
+    | shipping    | paid     |       #1    |         |           #1 |          #1 |  0_00 |  0_00 |     0_00 |
+");
 ```
 
 ## Usage
@@ -99,6 +185,12 @@ For example, Sebastian & Freek are in team Spatie which has a random ID, and Chr
 | Freek     |       #1 |
 | Christoph |       #2 |
 ```
+
+## Inspiration & alternatives
+
+The idea for this was inspired by Jest, which allows you to use a table as a data provider. https://maxoid.io/using-table-in-method-it.each-of-jest/
+
+[Snapshot testing](https://github.com/spatie/phpunit-snapshot-assertions) is also closely related to this. But snapshots aren't always optimized for readability, are stored in a separate file (not alongside the test), and are hard to write by hand (no TDD).
 
 ## Testing
 
