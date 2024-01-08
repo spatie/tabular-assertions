@@ -55,7 +55,7 @@ class Column
         return str_pad(
             string: $raw ? $data : $this->value($data),
             length: $this->width,
-            pad_type: $this->align === Align::Left ? STR_PAD_RIGHT : STR_PAD_LEFT,
+            pad_type: $this->align->padType(),
         );
     }
 
