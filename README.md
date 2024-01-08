@@ -261,7 +261,7 @@ expect()->extend('toMatchUsers', function (string $expected) {
 
 ## Inspiration & alternatives
 
-The idea for this was inspired by Jest, which allows you to use a [table as a data provider](https://maxoid.io/using-table-in-method-it.each-of-jest/).
+The idea for this was inspired by Jest, which allows you to use a [table as a data provider](https://dev.to/andrewmcoupe/sit-down-at-my-jest-tagged-template-literal-table-and-tidy-up-your-tests-4f71).
 
 [Snapshot testing](https://github.com/spatie/phpunit-snapshot-assertions) is also closely related to this. But snapshots aren't always optimized for readability, are stored in a separate file (not alongside the test), and are hard to write by hand (no TDD).
 
