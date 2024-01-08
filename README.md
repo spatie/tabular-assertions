@@ -178,6 +178,87 @@ For example, Sebastian & Freek are in team Spatie which has a random ID, and Chr
 | Christoph |       #2 |
 ```
 
+### Custom assertions
+
+Tabular assertions will cast the actual values to strings. We're often dealing with data more complex than stringables, in those cases it's worth creating a custom assertion method that prepares the data.
+
+Consider the following example with a `User` model that has an `id`, `name`, and `date_of_birth` which will be cast to a `Carbon` object.
+
+```php
+expect(User::all())->toMatchTable('
+    | id | name       |       date_of_birth |
+    |  1 | Sebastian  | 1992-02-01 00:00:00 |
+');
+```
+
+Because `Carbon` objects automatically append seconds when stringified, our table becomes noisy. Instead, we'll create a custom `toMatchUsers` assertion to prepare our data before asserting.
+
+```php
+expect()->extend('toMatchUsers', function (string $expected) {
+    $users = $this->value->map(function (User $user) {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'date_of_birth' => $user->date_of_birth->format('Y-m-d'),
+        ];
+    });
+
+    expect($users)->toBe($expected);
+});
+```
+
+```php
+expect(User::all())->toMatchTable('
+    | id | name       | date_of_birth |
+    |  1 | Sebastian  |    1992-02-01 |
+');
+```
+
+In PHPUnit, this would be a custom assertion method.
+
+```php
+class UserTest extends TestCase
+{
+    use TabularAssertions;
+
+    private function assertMatchesUsers(string $expected, Collection $users): void
+    {
+        $users = $users->map(function (User $user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'date_of_birth' => $user->date_of_birth->format('Y-m-d'),
+            ];
+        });
+
+        $this->assertMatchesTable($expected, $users);
+    }
+}
+```
+
+This can also useful for any data transformations or truncations you want to do before asserting. Another example: `first_name` and `last_name` might be separate columns in the database, but in assertions they can be combined to reduce unnecessary whitespace in the table.
+
+```php
+expect(User::all())->toMatchTable('
+    | id | name                | date_of_birth |
+    |  1 | Sebastian De Deyne  |    1992-02-01 |
+');
+```
+
+```php
+expect()->extend('toMatchUsers', function (string $expected) {
+    $users = $this->value->map(function (User $user) {
+        return [
+            'id' => $user->id,
+            'name' => $user->first_name . ' ' . $user->last_name,
+            'date_of_birth' => $user->date_of_birth->format('Y-m-d'),
+        ];
+    });
+
+    expect($users)->toBe($expected);
+});
+```
+
 ## Inspiration & alternatives
 
 The idea for this was inspired by Jest, which allows you to use a [table as a data provider](https://maxoid.io/using-table-in-method-it.each-of-jest/).
