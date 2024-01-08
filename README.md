@@ -17,10 +17,7 @@ test('it compares a table', function () use ($users) {
         ->addItem('Pencil', 5)
         ->create();
 
-        $items = $order->items
-            ->map->only(['id', 'order_id', 'name', 'quantity']);
-
-    expect($items)->toMatchTable('
+    expect($order->items)->toMatchTable('
         | #id | #order_id | name   | quantity |
         |  #1 |        #1 | Pen    |        2 |
         |  #2 |        #1 | Paper  |        1 |
@@ -47,15 +44,12 @@ class PHPUnitTest extends TestCase
             ->addItem('Pencil', 5)
             ->create();
 
-        $items = $order->items
-            ->map->only(['id', 'order_id', 'name', 'quantity']);
-    
         $this->assertMatchesTable('
             | #id | #order_id | name   | quantity |
             |  #1 |        #1 | Pen    |        2 |
             |  #2 |        #1 | Paper  |        1 |
             |  #3 |        #1 | Pencil |        5 |
-        ', $items);
+        ', $order->items);
     }
 }
 ```
@@ -186,7 +180,7 @@ For example, Sebastian & Freek are in team Spatie which has a random ID, and Chr
 
 ## Inspiration & alternatives
 
-The idea for this was inspired by Jest, which allows you to use a table as a data provider. https://maxoid.io/using-table-in-method-it.each-of-jest/
+The idea for this was inspired by Jest, which allows you to use a [table as a data provider](https://maxoid.io/using-table-in-method-it.each-of-jest/).
 
 [Snapshot testing](https://github.com/spatie/phpunit-snapshot-assertions) is also closely related to this. But snapshots aren't always optimized for readability, are stored in a separate file (not alongside the test), and are hard to write by hand (no TDD).
 
