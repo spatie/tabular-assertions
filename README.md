@@ -113,7 +113,7 @@ expect($items[1])->toBe([
     'quantity' => 1,
 ]);
 
-// etc…
+// …
 ```
 
 Arrays without keys can't be aligned properly (manually maintained spaces would be striped by code style fixers). This becomes unclear when asserting multiple columns with different lengths.
