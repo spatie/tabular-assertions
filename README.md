@@ -10,7 +10,7 @@ Tabular assertions allow you to describe data in a Markdown table-like format an
 With Pest:
 
 ```php
-test('it compares a table', function () use ($users) {
+test('it compares a table', function () {
     $order = Order::factory()
         ->addItem('Pen', 2)
         ->addItem('Paper', 1)
