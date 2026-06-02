@@ -1,8 +1,8 @@
 # Write tabular assertions with Pest or PHPUnit
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/tabular-assertions.svg?style=flat-square)](https://packagist.org/packages/spatie/tabular-assertions)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/spatie/tabular-assertions/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/spatie/tabular-assertions/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/spatie/tabular-assertions/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/spatie/tabular-assertions/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/spatie/tabular-assertions/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/tabular-assertions/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://github.com/spatie/tabular-assertions/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/spatie/tabular-assertions/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/tabular-assertions.svg?style=flat-square)](https://packagist.org/packages/spatie/tabular-assertions)
 
 Tabular assertions allow you to describe data in a Markdown table-like format and compare it to the actual data. This is especially useful when comparing large, ordered data sets like financial data or a time series. 
