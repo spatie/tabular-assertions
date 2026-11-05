@@ -19,9 +19,9 @@
     },
     "require-dev": {
         "laravel/pint": "^1.0",
-        "pestphp/pest": "^2.30",
+        "pestphp/pest": "^2.30 || ^5.3",
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^10.5 || ^13.4",
         "spatie/ray": "^1.40"
     },
     "autoload": {
